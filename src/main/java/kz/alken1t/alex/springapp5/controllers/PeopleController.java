@@ -25,7 +25,7 @@ public class PeopleController {
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model){
+    public String show(@PathVariable("id") Long id, Model model){
         model.addAttribute("person",personDAO.show(id));
         return "people/show";
     }
@@ -48,7 +48,7 @@ public class PeopleController {
 
     @GetMapping("/{id}/edit")
     public String edit(Model model,
-                       @PathVariable("id") int id){
+                       @PathVariable("id") Long id){
         model.addAttribute("person",personDAO.show(id));
         return "people/edit";
     }
@@ -56,7 +56,7 @@ public class PeopleController {
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("person") @Valid Person person,
                          BindingResult bindingResult,
-                         @PathVariable("id") int id){
+                         @PathVariable("id") Long id){
         if ((bindingResult.hasErrors())){
             return "people/edit";
         }
@@ -64,7 +64,7 @@ public class PeopleController {
         return "redirect:/people";
     }
     @DeleteMapping("/{id}")
-    public String delete (@PathVariable("id") int id){
+    public String delete (@PathVariable("id") Long id){
         personDAO.delete(id);
         return "redirect:/people";
     }

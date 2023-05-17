@@ -1,44 +1,41 @@
 package kz.alken1t.alex.springapp5.dao;
 
+import kz.alken1t.alex.springapp5.repository.PersonRepository;
 import kz.alken1t.alex.springapp5.models.Person;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class PersonDAO {
-    private static int PEOPLE_COUNT;
-    private List<Person> people = new ArrayList<>();
+  //  private static int PEOPLE_COUNT;
 
-    {
-        people.add(new Person(++PEOPLE_COUNT, "Tom","tom@mail.ru",34));
-        people.add(new Person(++PEOPLE_COUNT, "Bob","bob@mail.ru",52));
-        people.add(new Person(++PEOPLE_COUNT, "Mike","mike@yahoo.com",18));
-        people.add(new Person(++PEOPLE_COUNT, "Katy","katy@gmail.com",34));
-    }
+    private final PersonRepository personRepository;
+
+
 
     public List<Person> index() {
-        return people;
+        return personRepository.findAll();
     }
 
-    public Person show(int id) {
-        return people.stream().filter(person -> person.getId() == id).findAny().orElse(null);
+    public Person show(Long id) {
+        return personRepository.findById(id).orElseThrow();
     }
 
     public void save(Person person) {
-        person.setId(++PEOPLE_COUNT);
-        people.add(person);
+        personRepository.save(person);
     }
 
-    public void update(int id, Person updatePerson) {
-        Person personToBeUpdate = show(id);
+    public void update(Long id, Person updatePerson) {
+        Person personToBeUpdate = personRepository.findById(id).orElseThrow();
         personToBeUpdate.setName(updatePerson.getName());
         personToBeUpdate.setAge(updatePerson.getAge());
         personToBeUpdate.setEmail(updatePerson.getEmail());
     }
 
-    public void delete(int id) {
-        people.removeIf(person -> person.getId()== id);
+    public void delete(Long id) {
+        personRepository.deleteById(id);
     }
 }
